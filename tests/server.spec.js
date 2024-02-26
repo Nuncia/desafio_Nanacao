@@ -3,10 +3,14 @@ const server = require('../index');
 const { response } = require('express');
 
 describe('Operaciones CRUD de cafes', () => {
-   it('GET  /cafes', async () => {
-      const response = await request(server).get('/cafes');
-      expect(response.statusCode).toBe(200);
+   it('GET  /cafes codigo 200', async () => {
+      const { statusCode, body } = await request(server).get('/cafes');
+      const cafes = body;
+      expect(statusCode).toBe(200);
+      expect(cafes).toBeInstanceOf(Array);
+      expect(cafes.length).toBeGreaterThan(0);
    });
+
    it('DELETE /cafes/:id codigo 404', async () => {
       const jwt = 'token';
       const idDeProductoAEliminar = 4;
@@ -18,12 +22,24 @@ describe('Operaciones CRUD de cafes', () => {
       expect(ids).not.toContain(idDeProductoAEliminar);
    });
 
-   it('POST /cafes', async () => {
+   it('POST /cafes codigo 201', async () => {
       const cafe = {
          id: 5,
          nombre: 'Ristretto',
       };
-      const respose = await request(server).post('/cafes').send(cafe);
-      expect(response.statusCode).toBe(201);
+      const { statusCode } = await request(server).post('/cafes').send(cafe);
+      expect(statusCode).toBe(201);
+   });
+
+   it('PUT /cafes/:id codigo 400', async () => {
+      const id = 5;
+      const cafe = {
+         id: 4,
+         nombre: 'Ristretto',
+      };
+      const { statusCode } = await request(server)
+         .put(`/cafes/${id}`)
+         .send(cafe);
+      expect(statusCode).toBe(400);
    });
 });

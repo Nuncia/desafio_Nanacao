@@ -60,7 +60,7 @@ app.delete('/cafes/:id', (req, res) => {
 
       if (cafeIndexFound >= 0) {
          cafes.splice(cafeIndexFound, 1);
-         console.log(cafeIndexFound, cafes);
+         //  console.log(cafeIndexFound, cafes);
          res.send(cafes);
       } else {
          res.status(404).send({
